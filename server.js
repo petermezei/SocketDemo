@@ -29,9 +29,9 @@ var mailListener = new MailListener({
     authTimeout: 5000,
     //debug: console.log, // Or your custom function with only one incoming argument. Default: null
     //mailbox: "INBOX", // mailbox to monitor
-    //searchFilter: ["UNSEEN", "FLAGGED"], // the search filter being used after an IDLE notification has been retrieved
+    searchFilter: ["UNSEEN"],
     tlsOptions: { rejectUnauthorized: false },
-    markSeen: false,
+    markSeen: true,
     fetchUnreadOnStart: true,
     mailParserOptions: { streamAttachments: true },
     attachments: true,
