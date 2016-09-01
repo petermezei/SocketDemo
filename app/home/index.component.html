@@ -1,0 +1,21 @@
+﻿<section>
+    <div class="container-fluid">
+        <div class="col-xs-5">
+            {{latest.from}}
+            <hr>
+            {{latest.subject}}
+            <hr>
+            {{latest.body}}
+        </div>
+        <div class="col-xs-3">
+            <ul>
+                <li *ngFor="let item of latest.tags">{{item}}</li>
+            </ul>
+        </div>
+        <div class="col-xs-4">
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let message of messages; let i = index" (click)="selectMessage(i)">{{message.subject}}</li>
+            </ul>
+        </div>
+    </div>
+</section>
