@@ -1,20 +1,22 @@
 ﻿<section>
     <div class="container-fluid">
         <div class="col-xs-5 bg-info">
-            From: {{latest.from}}
-            <hr>
-            Subject: {{latest.subject}}
-            <hr>
-            {{latest.body}}
+            <div class="media">
+                <div class="media-body">
+                    <small>{{latest.from}}</small>
+                    <h4 class="media-heading">{{latest.subject}}</h4>
+                    <p>{{latest.body}}</p>
+                </div>
+            </div>
         </div>
         <div class="col-xs-3">
-            <ul>
-                <li *ngFor="let item of latest.tags">{{item}}</li>
-            </ul>
+            <h1 *ngIf="latest.tags[0]">{{latest.tags[0].name}} <span>{{latest.tags[0].score}}</span></h1>
+            <h2 *ngIf="latest.tags[1]">{{latest.tags[1].name}} <span>{{latest.tags[1].score}}</span></h2>
+            <h3 *ngIf="latest.tags[2]">{{latest.tags[2].name}} <span>{{latest.tags[2].score}}</span></h3>
         </div>
         <div class="col-xs-4">
             <ul class="list-group">
-                <li class="list-group-item" *ngFor="let message of messages; let i = index" (click)="selectMessage(i)">{{message.subject}}</li>
+                <li class="list-group-item" *ngFor="let message of messages; let i = index" (click)="selectMessage(i)">{{message.from}} <br/> {{message.subject}}</li>
             </ul>
         </div>
     </div>

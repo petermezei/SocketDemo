@@ -5,7 +5,7 @@ var express = require('express');
 var connect = require('connect');
 var http = require('http');
 var config = require('config');
-var slambySdk = require('slamby-sdk');
+var SlambySdk = require('slamby-sdk');
 var Guid = require('guid');
 var bodyParser = require('body-parser');
 var MailListener = require("mail-listener2");
@@ -21,7 +21,7 @@ io.sockets.on('connection', function (socket) {
 console.log("Connect to the email address...");
 var mailListener = new MailListener({
     username: "groupama@slamby.com",
-    password: "Hello99!",
+    password: "<password>",
     host: "imap.gmail.com",
     port: 993,
     tls: true,
@@ -55,11 +55,34 @@ mailListener.on("mail", function (mail, seqno, attributes) {
         from: mailFrom,
         subject: mailSubject,
         body: mailBody,
-        tags: ["DemoTagA", "DemoTagB", "DemoTagC"]
+        tags: []
     };
-    io.emit('notification', objToSend);
+    getCategories(mailBody).then(function (data) {
+        data.forEach(function (item) {
+            //console.log(item.TagId + " " + item.Score + " " + item.Tag.Name);
+            objToSend.tags.push({ "id": item.TagId, "score": item.Score, "name": item.Tag.Name });
+        });
+        io.emit('notification', objToSend);
+    });
 });
 mailListener.start(); // start listening
+function getCategories(textToAnalyse) {
+    var client = new SlambySdk.ApiClient();
+    client.basePath = "https://europe.slamby.com/profession/";
+    client.defaultHeaders = {
+        "Authorization": "Slamby <secret>"
+    };
+    var apiInstance = new SlambySdk.ClassifierServiceApi(client);
+    var id = "category_position"; // String | 
+    var opts = {
+        'request': new SlambySdk.ClassifierRecommendationRequest() // ClassifierRecommendationRequest | 
+    };
+    opts.request.text = textToAnalyse;
+    opts.request.count = 3;
+    opts.request.useEmphasizing = false;
+    opts.request.needTagInResult = true;
+    return apiInstance.classifierRecommendService(id, opts);
+}
 console.log("Server URL is: http://localhost:8080");
 //gzip enabled
 app.use(connect.compress());

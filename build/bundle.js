@@ -85042,11 +85042,7 @@ webpackJsonp([1,0],[
 	            "subject": "Subject",
 	            "body": "Body",
 	            "from": "From",
-	            "tags": [
-	                "a",
-	                "b",
-	                "c"
-	            ]
+	            "tags": [{ "name": "A" }]
 	        };
 	        this.messages = [];
 	        this.selectMessage = function (i) {
@@ -85055,13 +85051,14 @@ webpackJsonp([1,0],[
 	        this.socket = io.connect('http://localhost:3000');
 	        // on every message received
 	        this.socket.on('notification', function (data) {
-	            this.messages.push({
+	            console.log(data);
+	            this.messages.unshift({
 	                "subject": data.subject,
 	                "body": data.body,
 	                "from": data.from[0].address,
 	                "tags": data.tags
 	            });
-	            this.selectMessage(this.messages.length - 1);
+	            this.selectMessage(0);
 	        }.bind(this));
 	    }
 	    WelcomeComponent = __decorate([
